@@ -10,11 +10,9 @@ import com.mattforni.games.othello.gui.Gameboard;
 import com.mattforni.games.othello.gui.TopPanel;
 
 /**
- * TODO re-doc this
- * The OthelloMain is the large and top-level all-encompassing object that creates both the
- * board and the sidepanel.  Then the board and the sidepanel handle the rest of the work.
- * Essentially, this class is the lazy class that starts everything in motion by delegating
- * the rest of the work out to the smaller-level objects.
+ * {@link Othello} is simply a container that acts as the main entry point to
+ * the application. It creates and binds all of the components necessary to play
+ * and display the game of Othello ({@link http://en.wikipedia.org/wiki/Reversi}).
  *
  * @author Matthew Fornaciari <mattforni@gmail.com>
  */
@@ -29,6 +27,7 @@ public class Othello extends JPanel{
     public Othello() {
         super(new BorderLayout());
 
+        // Create and add all of the display components
         this.topPanel = new TopPanel();
         this.gameboard = new Gameboard();
         this.referee = new Referee(gameboard, topPanel);
@@ -40,20 +39,12 @@ public class Othello extends JPanel{
 
         this.setVisible(true);
 
-        new GameFrame(this);
-    }
-
-    private class GameFrame extends JFrame {
-        private GameFrame(final JPanel othello) {
-            super();
-            this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-            // Add the othello panel to the frame and show it
-            this.add(othello);
-
-            this.pack();
-            this.setVisible(true);
-        }
+        // Create and display the frame
+        final JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(this);
+        frame.pack();
+        frame.setVisible(true);
     }
 
     public static void main(String[] argv) {

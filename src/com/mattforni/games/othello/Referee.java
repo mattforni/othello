@@ -20,15 +20,13 @@ import com.mattforni.games.othello.players.Player;
 import com.mattforni.games.othello.players.Player.Side;
 
 /**
- * TODO re-doc
- * The referee is the behind the scenes interaction between the two players.  This class keeps track
- * of who the two players are via a combination of its mutator methods and the white/blackplayerbuttons.
- * At the end of every player's turn they call the start method on the referee who then identifies who
- * the current player is and switches the current player to the other player.  The referee then call's
- * the new current player's start method and they begin.  This cycle continues until the referee finds 
- * that neither player has a move in which case it ends the game.
+ * The referee is responsible for tracking and managing the actual gameplay
+ * during the course of a game. It does this by extending the {@link Timer}
+ * class and defining a new {@link ActionListener} to be executed whenever the
+ * timer is executed (see {@link TurnHandler}). The entirety of the logic that
+ * controls game flow resides in this file.
  *
- * @author <Matthew Fornaciari>
+ * @author Matthew Fornaciari <mattforni@gmail.com>
  */
 
 @SuppressWarnings("serial")
@@ -91,6 +89,7 @@ public class Referee extends Timer {
         this.start();
     }
 
+    /* Private methods */
     private Player getOpponent(final Side side) {
         if (side == Side.WHITE) {
             return players.get(Side.BLACK);
@@ -108,6 +107,10 @@ public class Referee extends Timer {
         topPanel.setPieces(count(Side.WHITE), count(Side.BLACK));
     }
 
+    /* Private classes */
+    /**
+     * The {@link ClickListener} defines how users may interact with the gameboard.
+     */
     private class ClickListener extends MouseAdapter {
         private final Gameboard gameboard;
         private final Referee referee;
@@ -119,7 +122,7 @@ public class Referee extends Timer {
         }
 
         @Override
-        public void mouseClicked(final MouseEvent e) {
+        public final void mouseClicked(final MouseEvent e) {
             // If the current player is not set or is not human there is nothing to do
             final Player current = referee.getCurrent();
             if (current == null || !current.isHuman()) { return; }
@@ -133,6 +136,9 @@ public class Referee extends Timer {
         }
     }
 
+    /**
+     * The {@link TurnHandler} defines the game flow logic for the {@link Referee}.
+     */
     private class TurnHandler implements ActionListener {
         private final Referee referee;
 
@@ -140,7 +146,8 @@ public class Referee extends Timer {
             this.referee = referee;
         }
 
-        public void actionPerformed(final ActionEvent e) {
+        @Override
+        public final void actionPerformed(final ActionEvent e) {
             final Player current = getCurrent();
             if (current.hasMoves(gameboard)) {
                 // Update the status display
