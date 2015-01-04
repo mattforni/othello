@@ -40,19 +40,15 @@ public class SmartSquare extends Square {
     }
 
     @Override
-    public final Side belongsTo () { return side; }
+    public final Side getSide () { return side; }
 
     @Override
-    public final boolean hasPiece() { return piece.isVisible(); }
+    public final boolean hasPiece() { return side != null; }
 
     public void setPiece(Side side){
         this.side = side;
         piece.setFillColor(side.color);
         piece.setVisible(true);
-    }
-
-    public boolean isVisible(){
-        return piece.isVisible();
     }
 
     public int getRow() { return row; }
@@ -70,7 +66,7 @@ public class SmartSquare extends Square {
                     // if it is the piece itself we want to skip this square and continue on
                     if(row == this.row && column == this.column) { continue; }
                     final Square square = gameboard.get(row, column);
-                    if(square.isVisible() && square.belongsTo() != side) {
+                    if(square.hasPiece() && square.getSide() != side) {
                         int rInc = (row-this.row), cInc = (column-this.column);
                         if(gameboard.get(row+rInc, column+cInc).checkSandwich(side, rInc, cInc)){
                             return true; 
@@ -85,11 +81,11 @@ public class SmartSquare extends Square {
     public boolean checkSandwich(final Side side, int rInc, int cInc) {
         // increment the row and column so that we check the NEXT piece and not the same
     	// if the piece is the same color then a sandwich has been formed, return true
-        if(this.isVisible() && this.belongsTo() == side) {
+        if(hasPiece() && getSide() == side) {
             return true;
         }
         // if the piece has been placed, but is of the opposite color, check the next
-        if(this.isVisible() && this.belongsTo() != side) {
+        if(hasPiece() && getSide() != side) {
             final Square square = gameboard.get(row+rInc, column+cInc);
             return square.checkSandwich(side, rInc, cInc);
         }
@@ -103,7 +99,7 @@ public class SmartSquare extends Square {
             for(int column = this.column - 1; column <= this.column + 1; column++){
                 if(row == this.row && column == this.column) { continue; }
                 final Square square = gameboard.get(row, column);
-                if(square.isVisible() && square.belongsTo() != side){
+                if(square.hasPiece() && square.getSide() != side){
                     int rInc = (row-this.row), cInc = (column-this.column);
                     if(gameboard.get(row+rInc, column+cInc).checkSandwich(side, rInc, cInc)) {
                         square.flipSandwich(side, rInc, cInc);
@@ -115,7 +111,7 @@ public class SmartSquare extends Square {
 
     public void flipSandwich(Side side, int rInc, int cInc){
         Square square = gameboard.get(this.row, this.column);
-        while(square.belongsTo() != side) {
+        while(square.hasPiece() && square.getSide() != side) {
             square.setPiece(side);
             square = gameboard.get(square.getRow()+rInc, square.getColumn()+cInc);
         }

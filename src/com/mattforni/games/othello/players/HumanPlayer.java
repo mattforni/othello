@@ -21,7 +21,7 @@ public class HumanPlayer extends Player {
     public boolean makeMove(final Gameboard gameboard, final Square square){
         // TODO make this smarter
         gameboard.makeMove(side, square.getRow(), square.getColumn());
-        gameboard.unilluminate();
+        gameboard.hideMoves();
         return true;
     }
 

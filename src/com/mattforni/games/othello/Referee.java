@@ -14,7 +14,7 @@ import java.util.Map;
 import javax.swing.Timer;
 
 import com.mattforni.games.othello.gui.Gameboard;
-import com.mattforni.games.othello.gui.TopPanel;
+import com.mattforni.games.othello.gui.DisplayPanel;
 import com.mattforni.games.othello.gui.square.Square;
 import com.mattforni.games.othello.players.Player;
 import com.mattforni.games.othello.players.Player.Side;
@@ -34,12 +34,12 @@ public class Referee extends Timer {
     private final static String STATUS_FORMAT = "%s's turn";
 
     private final Gameboard gameboard;
-    private final TopPanel topPanel;
+    private final DisplayPanel topPanel;
     private final Map<Side, Player> players;
 
     private Side current;
 
-    public Referee(final Gameboard gameboard, final TopPanel topPanel) {
+    public Referee(final Gameboard gameboard, final DisplayPanel topPanel) {
         super(250, null);
 
         this.gameboard = gameboard;
@@ -51,7 +51,7 @@ public class Referee extends Timer {
     }
 
     public final int count(final Side side) {
-        return gameboard.getColorCount(side);
+        return gameboard.count(side);
     }
 
     public final Player getCurrent() { return players.get(current); }
@@ -156,7 +156,7 @@ public class Referee extends Timer {
                     current.showMoves(gameboard);
                     referee.stop();
                 } else {
-                    gameboard.unilluminate();
+                    gameboard.hideMoves();
                     current.makeMove(gameboard);
                     nextTurn();
                 }

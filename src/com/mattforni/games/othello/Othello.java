@@ -5,9 +5,9 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.mattforni.games.othello.gui.BottomPanel;
+import com.mattforni.games.othello.gui.ControlPanel;
 import com.mattforni.games.othello.gui.Gameboard;
-import com.mattforni.games.othello.gui.TopPanel;
+import com.mattforni.games.othello.gui.DisplayPanel;
 
 /**
  * {@link Othello} is simply a container that acts as the main entry point to
@@ -20,22 +20,22 @@ import com.mattforni.games.othello.gui.TopPanel;
 @SuppressWarnings("serial")
 public class Othello extends JPanel{
     private final Gameboard gameboard;
-    private final TopPanel topPanel;
-    private final BottomPanel bottomPanel;
+    private final DisplayPanel display;
+    private final ControlPanel control;
     private final Referee referee;
 
     public Othello() {
         super(new BorderLayout());
 
         // Create and add all of the display components
-        this.topPanel = new TopPanel();
+        this.display = new DisplayPanel();
         this.gameboard = new Gameboard();
-        this.referee = new Referee(gameboard, topPanel);
-        this.bottomPanel = new BottomPanel(referee);
+        this.referee = new Referee(gameboard, display);
+        this.control = new ControlPanel(referee);
 
-        this.add(topPanel, BorderLayout.NORTH);
+        this.add(display, BorderLayout.NORTH);
         this.add(gameboard, BorderLayout.CENTER);
-        this.add(bottomPanel, BorderLayout.SOUTH);
+        this.add(control, BorderLayout.SOUTH);
 
         this.setVisible(true);
 

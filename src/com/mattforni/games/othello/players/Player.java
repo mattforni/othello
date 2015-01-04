@@ -50,7 +50,7 @@ public abstract class Player {
     }
 
     public void showMoves(final Gameboard gameboard) {
-        gameboard.illuminate(this);
+        gameboard.showMoves(this);
     }
 
     public enum Side {

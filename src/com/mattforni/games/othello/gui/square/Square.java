@@ -32,7 +32,7 @@ public abstract class Square {
         this.square = new Rectangle(gameboard, column*SIZE, row*SIZE, SIZE, SIZE);
     }
 
-    public Side belongsTo() { return null; }
+    public Side getSide() { return null; }
     public boolean hasPiece() { return false; }
 
     public boolean isValidMove(Side side){
@@ -55,11 +55,7 @@ public abstract class Square {
     public boolean isBorder(){
         return false;
     }
-    
-    public boolean isVisible(){
-        return false;
-    }
-    
+
     public int getRow(){
     	return 0;
     }

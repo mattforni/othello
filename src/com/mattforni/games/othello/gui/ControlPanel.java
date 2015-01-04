@@ -24,16 +24,15 @@ import com.mattforni.games.othello.players.Player;
 import com.mattforni.games.othello.players.Player.Side;
 
 /**
- * TODO re-doc
- * The SidePanel contains all of the controls, buttons, score, etc. that are incorporated in the game.
- * Everything that is needed to control the game is located in this panel which is then added to the 
- * eastern border of the OthelloMain class which utilizes a border layout.  
+ * The {@link ControlPanel} contains all of the controls for Othello which
+ * include player selection and buttons to start a new game, apply the selected
+ * settings and quit the application.
  *
- * @author <Matthew Fornaciari>
+ * @author Matthew Fornaciari <mattforni@gmail.com>
  */
 
 @SuppressWarnings("serial")
-public class BottomPanel extends JPanel {
+public class ControlPanel extends JPanel {
     private static final String COMPUTER_FORMAT = "Computer, Level %d";
     private static final Dimension DIMENSION = new Dimension(300, 150);
     private static final int NUM_COMPUTERS = 3;
@@ -41,7 +40,7 @@ public class BottomPanel extends JPanel {
     private final Referee referee;
     private final Map<Side, Player> players;
 
-    public BottomPanel(final Referee referee){
+    public ControlPanel(final Referee referee){
         super(new GridLayout(0, 1));
 
         this.setBackground(Color.WHITE);
@@ -57,16 +56,17 @@ public class BottomPanel extends JPanel {
         updatePlayers();
     }
 
-    private final JPanel buttons() {
+    /* Private methods */
+    private JPanel buttons() {
         final JPanel buttons = new JPanel(new GridLayout(1, 3));
         buttons.setBackground(Color.WHITE);
         buttons.add(new ResetButton());
-        buttons.add(new ApplyButton(referee));
+        buttons.add(new ApplyButton());
         buttons.add(new QuitButton());
         return buttons;
     }
 
-    private final JPanel playerSelection() {
+    private JPanel playerSelection() {
         final JPanel playerSelection = new JPanel(new GridLayout(5, 2));
         playerSelection.setBackground(Color.WHITE);
 
@@ -107,7 +107,7 @@ public class BottomPanel extends JPanel {
         return playerSelection;
     }
 
-    private final void updatePlayers() {
+    private void updatePlayers() {
         final Player black = players.get(Side.BLACK);
         final Player white = players.get(Side.WHITE);
 
@@ -115,9 +115,12 @@ public class BottomPanel extends JPanel {
         referee.setPlayer(white);
     }
 
-    /* Private static classes used in constructing the side panel */
+    /* Private classes */
+    /**
+     * {@link ApplyButton} updates the {@link Referee} with the current settings.
+     */
     public class ApplyButton extends JButton {
-        public ApplyButton(final Referee referee) {
+        public ApplyButton() {
             super("Apply Settings");
             this.addActionListener(new PlayerListener());
         }
@@ -131,6 +134,9 @@ public class BottomPanel extends JPanel {
         }
     }
 
+    /**
+     * {@link PlayerButton} is a radio button representation of a {@link Player}.
+     */
     private class PlayerButton extends JRadioButton {
         private final Player player;
 
@@ -147,6 +153,9 @@ public class BottomPanel extends JPanel {
         }
     }
 
+    /**
+     * {@link QuitButton} simply exits the application when pressed.
+     */
     private static final class QuitButton extends JButton {
         public QuitButton(){
             super("Quit");
@@ -161,10 +170,8 @@ public class BottomPanel extends JPanel {
     }
 
     /**
-     * This is a convenient subclass of JButton that simply resets the board
-     * back to it initial conditions with black pieces in the top left and
-     * bottom right of the middle four squares and white pieces in the top right
-     * and bottom left.
+     * {@link ResetButton} resets the {@link Gameboard} and {@link Referee} to
+     * their initial states in preparation for a new game.
      */
     private final class ResetButton extends JButton {
         public ResetButton() {

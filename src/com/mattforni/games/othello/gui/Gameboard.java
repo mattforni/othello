@@ -17,104 +17,87 @@ import com.mattforni.games.othello.players.Player;
 import com.mattforni.games.othello.players.Player.Side;
 
 /**
- * The Gameboard is quite possibly the most important class in the entire project, for it is in this class
- * that both the logical and visual containment are created and executed.  This class sports a copy constructor
- * that allows for the copying of a given gameboard, a very important method for the Minimax class.  It also has
- * several methods that both access and mutate several attributes of the squares it contains.  This class
- * keeps track of basically everything needed to play the game.  Thank god for the Gameboard!
+ * The {@link Gameboard} is quite possibly the most important class in the
+ * entire application since it is response for keeping track of the logical
+ * representation of the game. While not directly responsible for rendering
+ * the board in the gui, it does also define how and when the two dimensional
+ * array of {@link Square} objects should display themselves. This class is the
+ * bread and butter of the logic behind Othello.
  *
- * @author <Matthew Fornaciari>
+ * @author Matthew Fornaciari <mattforni@gmail.com>
  */
 
 @SuppressWarnings("serial")
 public class Gameboard extends JPanel {
-    public static final int ROWS = 10;
-    public static final int COLS = 10;
+    private static final int DEFAULT_ROWS = 10;
+    private static final int DEFAULT_COLUMNS = 10;
 
+    private final int rows;
+    private final int columns;
+    private final List<Square> moves;
     private final Square[][] squares;
-    private final List<Square> illuminated;
 
-    public Gameboard() {
+    public Gameboard() throws IllegalArgumentException {
+        this(DEFAULT_ROWS, DEFAULT_COLUMNS);
+    }
+
+    public Gameboard(final int rows, final int columns) throws IllegalArgumentException {
         super();
 
-        this.squares = new Square[ROWS][COLS];
-        this.illuminated = new ArrayList<Square>();
+        // If either board dimension is not even an exception is thrown
+        if (rows % 2 != 0 || columns % 2 != 0) {
+            throw new IllegalArgumentException("Board dimensions must be even");
+        }
+
+        // If the dimensions are not equal an exception is thrown
+        if (rows != columns) {
+            throw new IllegalArgumentException("The gameboard must be square");
+        }
+
+        this.rows = rows;
+        this.columns = columns;
+
+        this.moves = new ArrayList<Square>();
+        this.squares = new Square[rows][columns];
         newGame();
 
-        this.setSize(new Dimension(ROWS*SIZE, COLS*SIZE));
-        this.setPreferredSize(new Dimension(ROWS*SIZE, COLS*SIZE));
+        this.setSize(new Dimension(rows*SIZE, columns*SIZE));
+        this.setPreferredSize(new Dimension(rows*SIZE, columns*SIZE));
         this.setVisible(true);
     }
 
-    public Gameboard(final Gameboard gameboard) {
-        this();
+    public Gameboard(final Gameboard gameboard) throws IllegalArgumentException {
+        this(gameboard.numRows(), gameboard.numColumns());
 
-        for (int row = 0; row < ROWS; row ++) {
-            for (int column = 0; column < COLS; column++) {
+        for (int row = 0; row < rows; row ++) {
+            for (int column = 0; column < columns; column++) {
                 final Square square = gameboard.get(row, column);
                 if (square.hasPiece()) {
-                    squares[row][column].setPiece(square.belongsTo());
+                    squares[row][column].setPiece(square.getSide());
                 }
             }
         }
     }
 
-    public final Square get(final int row, final int column) {
-        if (row >= ROWS || column >= COLS) { return null; }
-        return squares[row][column];
-    }
-
-    public final void newGame(){
-        for(int row=0; row<ROWS; row++){
-            for(int col=0; col<COLS; col++){
-                if(row==0 || row==(ROWS-1) || col==0 || col==(COLS-1)){
-                    squares[row][col] = new BorderSquare(this, row, col);
-                } else{
-                    squares[row][col] = new SmartSquare(this, row, col);
-                   if((col==4 && row==4) || (col==5 && row==5)){
-                       squares[row][col].setPiece(Side.BLACK);
-                   }
-                   if((col==4 && row==5) || (col==5 && row==4)){
-                       squares[row][col].setPiece(Side.WHITE);
-                    }
-                }
-            }
-        }
-        this.repaint();
-    }
-
-    public int numMoves(final Player player){
-        int moves = 0;
-        for(int row = 0; row < ROWS; row++){
-            for(int col=0; col < COLS; col++){
-                if(squares[row][col].isValidMove(player.getSide())) { moves++; }
-            }
-        }
-        return moves;
-    }
-
-    public int getColorCount(Side side){
+    public final int count(final Side side) {
         int count = 0;
-        for(int row=0; row<ROWS; row++){
-            for(int col=0; col<COLS; col++){
-        if(squares[row][col].belongsTo()==side && squares[row][col].isVisible()){
-                    count++;
-                }
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                if (squares[row][column].getSide() == side) { count++; }
             }
         }
         return count;
     }
 
-    public void illuminate(final Player player) {
-        for(int row = 0; row < ROWS; row++){
-            for(int col = 0; col < COLS; col++){
-                final Square square = squares[row][col];
-                if(square.isValidMove(player.getSide())){
-                    square.illuminate();
-                    illuminated.add(square);
-                }
-            }
-        }
+    public final Square get(final int row, final int column) {
+        // If either row or column are out of bounds return null
+        if (row < 0 || row >= rows || column < 0 || column >= columns) { return null; }
+        return squares[row][column];
+    }
+
+    public final void hideMoves() {
+        if (moves.isEmpty()) { return; }
+        for (final Square square : moves) { square.unilluminate(); }
         this.repaint();
     }
 
@@ -124,22 +107,68 @@ public class Gameboard extends JPanel {
         this.repaint();
     }
 
-    public void unilluminate(){
-        if (illuminated.isEmpty()) { return; }
-        for (final Square square : illuminated) {
-            square.unilluminate();
+    public final void newGame() {
+        final int half = rows / 2;
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                if (isBorder(row, column)) {
+                    squares[row][column] = new BorderSquare(this, row, column);
+                } else {
+                   squares[row][column] = new SmartSquare(this, row, column);
+                   if ((column == half-1 && row == half-1) ||
+                           (column == half && row == half)) {
+                       squares[row][column].setPiece(Side.BLACK);
+                   }
+                   if((column == half-1 && row == half) ||
+                           (column == half && row == half-1)) {
+                       squares[row][column].setPiece(Side.WHITE);
+                    }
+                }
+            }
         }
         this.repaint();
     }
+
+    public final int numColumns() { return columns; }
+
+    public final int numMoves(final Player player){
+        int moves = 0;
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                if(squares[row][column].isValidMove(player.getSide())) { moves++; }
+            }
+        }
+        return moves;
+    }
+
+    public final int numRows() { return rows; }
 
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         final Graphics2D brush = (Graphics2D) g;
-        for(int row = 0; row < ROWS; row++) {
-            for(int col = 0; col < COLS; col++) {
+        for(int row = 0; row < rows; row++) {
+            for(int col = 0; col < columns; col++) {
                 squares[row][col].paint(brush);
             }
         }
+    }
+
+    public final void showMoves(final Player player) {
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                final Square square = squares[row][column];
+                if(square.isValidMove(player.getSide())) {
+                    square.illuminate();
+                    moves.add(square);
+                }
+            }
+        }
+        this.repaint();
+    }
+
+    /* Private methods */
+    private boolean isBorder(final int row, final int column) {
+        return row == 0 || row == rows-1 || column == 0 || column == columns-1;
     }
 }

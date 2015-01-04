@@ -1,8 +1,5 @@
 package com.mattforni.games.othello.players.ai;
 
-import static com.mattforni.games.othello.gui.Gameboard.COLS;
-import static com.mattforni.games.othello.gui.Gameboard.ROWS;
-
 import com.mattforni.games.othello.gui.Gameboard;
 import com.mattforni.games.othello.gui.square.Square;
 import com.mattforni.games.othello.players.ComputerPlayer;
@@ -36,8 +33,8 @@ public class Minimax extends Strategy {
         Move bestMove = new Move(null, Integer.MIN_VALUE);
 
         // creates the logical containment for the passed gameboard
-        for(int row = 0; row < ROWS; row++) {
-            for(int col = 0; col < COLS; col++) {
+        for(int row = 0; row < gameboard.numRows(); row++) {
+            for(int col = 0; col < gameboard.numColumns(); col++) {
                 if(gameboard.get(row, col).isValidMove(side)){
                     // if a move is valid, a copy board is created and 
                     // the move is made on that board
@@ -72,12 +69,12 @@ public class Minimax extends Strategy {
     public int boardEval(Gameboard gameboard, Side side){
         final Side opponent = getOpponent(side);
         int total = 0;
-        for(int row=0; row<ROWS; row++){
-            for(int col=0; col<COLS; col++){
+        for(int row=0; row < gameboard.numRows(); row++){
+            for(int col=0; col < gameboard.numColumns(); col++){
                 final Square square = gameboard.get(row, col);
-                if(square.isVisible() && square.belongsTo() == side) {
+                if(square.getSide() == side) {
                     total += _weights.getWeight(row, col);
-                } else if(square.isVisible() && square.belongsTo() == opponent) {
+                } else if(square.getSide() == opponent) {
                     total -= _weights.getWeight(row, col);
                 }
             }

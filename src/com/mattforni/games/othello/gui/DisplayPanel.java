@@ -11,16 +11,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
- * TODO re-doc
- * The SidePanel contains all of the controls, buttons, score, etc. that are incorporated in the game.
- * Everything that is needed to control the game is located in this panel which is then added to the 
- * eastern border of the OthelloMain class which utilizes a border layout.  
+ * The {@link DisplayPanel} contains all of the display components for Othello
+ * which include a status bar indicating whose turn it is and how many pieces
+ * each player has at present.
  *
- * @author <Matthew Fornaciari>
+ * @author Matthew Fornaciari <mattforni@gmail.com>
  */
 
 @SuppressWarnings("serial")
-public class TopPanel extends JPanel {
+public class DisplayPanel extends JPanel {
     private static final Dimension DIMENSION = new Dimension(300, 50);
     private static final String PIECES_FORMAT = "White: %d Black: %d";
     private static final String STATUS = "Select Players, then press 'Apply Settings'";
@@ -28,7 +27,7 @@ public class TopPanel extends JPanel {
     private final JLabel pieces;
     private final JLabel status;
 
-    public TopPanel() {
+    public DisplayPanel() {
         super(new GridLayout(2, 1));
 
         this.status = new JLabel(STATUS, CENTER);
