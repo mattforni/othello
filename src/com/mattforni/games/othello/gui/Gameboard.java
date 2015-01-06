@@ -11,7 +11,7 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import com.mattforni.games.othello.gui.square.BorderSquare;
-import com.mattforni.games.othello.gui.square.SmartSquare;
+import com.mattforni.games.othello.gui.square.PlayableSquare;
 import com.mattforni.games.othello.gui.square.Square;
 import com.mattforni.games.othello.players.Player;
 import com.mattforni.games.othello.players.Player.Side;
@@ -114,7 +114,7 @@ public class Gameboard extends JPanel {
                 if (isBorder(row, column)) {
                     squares[row][column] = new BorderSquare(this, row, column);
                 } else {
-                   squares[row][column] = new SmartSquare(this, row, column);
+                   squares[row][column] = new PlayableSquare(this, row, column);
                    if ((column == half-1 && row == half-1) ||
                            (column == half && row == half)) {
                        squares[row][column].setPiece(Side.BLACK);

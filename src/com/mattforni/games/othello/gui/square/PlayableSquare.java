@@ -8,19 +8,17 @@ import com.mattforni.games.othello.players.Player.Side;
 import com.mattforni.shapes.Ellipse;
 
 /**
- * TODO re-doc
- * An extension of the square class, this SmartSquare represents a space on the gameboard that 
- * may contain pieces.  This class is a composite shape, containing both a background square that
- * represents the board square and an ellipse that represents a piece.  The class overrides a good
- * deal of its parent class's methods, redefining them to allow for pieces to be played and other
- * such actions reserved only for gameboard squares.  In addition, this class sports a copy constructor
- * which is used when the current gameboard is to be copied, thus creating a new similar gameboard
- * of new but similar SmartSquares.
+ * {@link PlayableSquare} is an intelligent subclass of {@link Square} which
+ * encapsulates much of the game play logic. {@link PlayableSquare} objects can
+ * contain a piece and are able to determine whether or not they are a valid move
+ * for a given {@link Side}. When the {@link #flip(Side)} method is called this
+ * object will evaluate the {@link Gameboard} and will flip all necessary
+ * {@link Square} instances.
  *
- * @author <Matthew Fornaciari>
+ * @author Matthew Fornaciari <mattforni@gmail.com>
  */
 
-public class SmartSquare extends Square {
+public class PlayableSquare extends Square {
     private final static Color HIGHLIGHTED = new Color(51, 255, 51);
     private final static Color REGULAR = new Color(0, 225, 0);
 
@@ -28,7 +26,7 @@ public class SmartSquare extends Square {
 
     private Side side;
 
-    public SmartSquare(final Gameboard gameboard, final int row, final int col) {
+    public PlayableSquare(final Gameboard gameboard, final int row, final int col) {
         super(gameboard, row, col);
         square.setFillColor(REGULAR);
         piece = createPiece();
@@ -92,7 +90,7 @@ public class SmartSquare extends Square {
 
     @Override
     public final void paint(final Graphics2D brush){
-        square.paint(brush);
+        super.paint(brush);
         piece.paint(brush);
     }
 

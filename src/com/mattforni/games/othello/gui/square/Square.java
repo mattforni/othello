@@ -7,14 +7,10 @@ import com.mattforni.games.othello.players.Player.Side;
 import com.mattforni.shapes.Rectangle;
 
 /**
- * TODO re-doc
- * Square is the superclass for the two type of sqares that are used to create the gameboard.  There 
- * are various methods that are defined throughout this class that are the defaults for any subclass
- * that extends it; however, for the special squares, the smart squares, the vast majority of these
- * methods are overridden.  In addition there is a paint method that allows for the squares, and if 
- * they are smartsquares, the pieces, to be painted and visible to the players.
+ * {@link Square} acts as a simple superclass for both {@link BorderSquare} and
+ * {@link PlayableSquare} by defining sane defaults for publicly exposed methods.
  *
- * @author <Matthew Fornaciari>
+ * @author Matthew Fornaciari <mattforni@gmail.com>
  */
 
 public abstract class Square {
