@@ -32,12 +32,6 @@ public abstract class Square {
         this.square = new Rectangle(gameboard, column*SIZE, row*SIZE, SIZE, SIZE);
     }
 
-    public boolean checkSandwich(final Side side, final int rInc, final int cInc) { return false; }
-
-    public void flip() {}
-
-    public void flipSandwich(final Side side, final int rInc, final int cInc) {}
-
     public final int getColumn() { return column; }
 
     public final int getRow() { return row; }

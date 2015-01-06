@@ -61,61 +61,29 @@ public class SmartSquare extends Square {
                 if(row == this.row && column == this.column) { continue; }
 
                 // If there is a valid 'sandwich' in any direction return true
-                // TODO this may be able to be removed in favor of checkSandwich
-                Square square = gameboard.get(row, column);
-                if(square.hasPiece() && square.getSide() != side) {
-                    final int rInc = row - this.row;
-                    final int cInc = column - this.column;
-                    // TODO this may need to be fixed
-                    square = gameboard.get(row + rInc, column + cInc);
-                    if(square.checkSandwich(side, rInc, cInc)) { return true; }
-                }
+                if (hasSandwich(side, row, column)) { return true; }
             }
         }
 
-        return false;
-    }
-
-    @Override
-    public final boolean checkSandwich(final Side side, final int rInc, final int cInc) {
-        // increment the row and column so that we check the NEXT piece and not the same
-        // if the piece is the same color then a sandwich has been formed, return true
-        if(hasPiece() && getSide() == side) { return true; }
-
-        // if the piece has been placed, but is of the opposite color, check the next
-        if(hasPiece() && getSide() != side) {
-            // TODO this may need to be fixed
-            final Square square = gameboard.get(row + rInc, column + cInc);
-            return square.checkSandwich(side, rInc, cInc);
-        }
-
-        // if the piece does not satisfy either of these conditions there is either
-        // no piece on the square or this is a border piece in which case there is no sandwich
         return false;
     }
 
     @Override
     public final void flip(final Side side) {
-        for(int row = this.row - 1; row <= this.row + 1; row++){
-            for(int column = this.column - 1; column <= this.column + 1; column++){
+        // Flip the current square 
+        setPiece(side);
+
+        // Check each diagonal for a 'sandwhich' and flip if necessary
+        for(int row = this.row-1; row <= this.row+1; row++) {
+            for(int column = this.column-1; column <= this.column+1; column++) {
+                // No need to evaluated the square against itself
                 if(row == this.row && column == this.column) { continue; }
-                final Square square = gameboard.get(row, column);
-                if(square.hasPiece() && square.getSide() != side){
-                    int rInc = (row-this.row), cInc = (column-this.column);
-                    if(gameboard.get(row+rInc, column+cInc).checkSandwich(side, rInc, cInc)) {
-                        square.flipSandwich(side, rInc, cInc);
-                    }
+
+                // If there is a valid 'sandwich' in this direction flip it
+                if (hasSandwich(side, row, column)) {
+                    flip(side, row, column);
                 }
             }
-        }
-    }
-
-    @Override
-    public final void flipSandwich(final Side side, final int rInc, final int cInc) {
-        Square square = gameboard.get(this.row, this.column);
-        while(square.hasPiece() && square.getSide() != side) {
-            square.setPiece(side);
-            square = gameboard.get(square.getRow()+rInc, square.getColumn()+cInc);
         }
     }
 
@@ -138,5 +106,42 @@ public class SmartSquare extends Square {
                 SIZE-2*INDENT, SIZE-2*INDENT);
         piece.setVisible(false);
         return piece;
+    }
+
+    private void flip(final Side side, int nextRow, int nextColumn) {
+        final int rowDirection = nextRow - this.row;
+        final int columnDirection = nextColumn - this.column;
+
+        // Flip all pieces in the given direction
+        Square next = gameboard.get(nextRow, nextColumn);
+        while(next.hasPiece() && next.getSide() != side) {
+            next.setPiece(side);
+            nextRow += rowDirection;
+            nextColumn += columnDirection;
+            next = gameboard.get(nextRow, nextColumn);
+        }
+    }
+
+    private boolean hasSandwich(final Side side, int nextRow, int nextColumn) {
+        // If the next piece is not of the opposite color there is no 'sandwich'
+        Square next = gameboard.get(nextRow, nextColumn);
+        if (next.hasPiece() && next.getSide() != side) {
+            final int rowDirection = nextRow - this.row;
+            final int columnDirection = nextColumn - this.column;
+
+            nextRow += rowDirection;
+            nextColumn += columnDirection;
+            next = gameboard.get(nextRow, nextColumn);
+            // If we get to a border or an empty square there is no 'sandwich'
+            while (next.hasPiece()) {
+                // If we find a piece with the same color there is a 'sandwich'
+                if (next.getSide() == side) { return true; }
+                nextRow += rowDirection;
+                nextColumn += columnDirection;
+                next = gameboard.get(nextRow, nextColumn);
+            }
+        }
+
+        return false;
     }
 }
