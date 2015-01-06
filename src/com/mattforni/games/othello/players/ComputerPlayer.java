@@ -13,20 +13,15 @@ import com.mattforni.games.othello.players.ai.Strategy;
  */
 
 public class ComputerPlayer extends Player {
-    private final int intel;
     private final Strategy strategy;
 
     public ComputerPlayer(final int intel, final Side side) {
         super(side);
-        this.intel = intel;
-        this.strategy = new Minimax();
+        this.strategy = new Minimax(intel);
     }
 
     @Override
     public final boolean makeMove(final Gameboard gameboard) {
-        return makeMove(gameboard, strategy.getBestMove(gameboard, this).getSquare());
+        return makeMove(gameboard, strategy.getBestMove(gameboard, side).getSquare());
     }
-
-    @Override
-    public final int getIntel() { return intel; }
 }

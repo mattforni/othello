@@ -29,8 +29,6 @@ public abstract class Player {
         return false;
     }
 
-    public int getIntel() { return -1; }
-
     public final Side getSide() { return side; }
 
     public final boolean hasMoves(final Gameboard gameboard) {

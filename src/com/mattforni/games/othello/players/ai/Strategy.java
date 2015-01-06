@@ -11,12 +11,10 @@ package com.mattforni.games.othello.players.ai;
 
 import com.mattforni.games.othello.gui.Gameboard;
 import com.mattforni.games.othello.gui.square.Square;
-import com.mattforni.games.othello.players.Player;
 import com.mattforni.games.othello.players.Player.Side;
 
 public abstract class Strategy {
-    public abstract Move getBestMove(Gameboard gameboard, Player player);
-    public abstract int boardEval(Gameboard gameboard, Side side);
+    public abstract Move getBestMove(Gameboard gameboard, Side side);
 
     public static class Move {
         private final Square square;
