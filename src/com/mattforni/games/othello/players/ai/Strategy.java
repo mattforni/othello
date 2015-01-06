@@ -1,11 +1,12 @@
 package com.mattforni.games.othello.players.ai;
 
 /**
- * TODO re-doc
- * The Strategy interface is fairly useless considering we have but one strategy of AI movement.
- * However, is lays out the plan for Minimax and any strategy yet to come, YAY!
+ * {@link Strategy} defines the contract to which all AI algorithms must conform.
+ * As an abstract class it also defines the static class {@link Move} which
+ * essentially pairs a {@link Square} with a value for determining which move
+ * will be the best according to the active AI algorithm.
  *
- * @author <Matthew Fornaciari>
+ * @author Matthew Fornaciari <mattforni@gmail.com>
  */
 
 import com.mattforni.games.othello.gui.Gameboard;
