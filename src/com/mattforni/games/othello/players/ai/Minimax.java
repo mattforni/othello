@@ -63,7 +63,7 @@ public class Minimax extends Strategy {
         if(intel == 1){
             return this.boardEval(gameboard, side);
         } else {
-            final Player next = new ComputerPlayer(side.getOpponent(), intel-1);
+            final Player next = new ComputerPlayer(intel-1, side.getOpponent());
             return getBestMove(gameboard, next).getValue();
         }
     }

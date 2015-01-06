@@ -2,34 +2,31 @@ package com.mattforni.games.othello.players;
 
 import com.mattforni.games.othello.gui.Gameboard;
 import com.mattforni.games.othello.players.ai.Minimax;
+import com.mattforni.games.othello.players.ai.Strategy;
 
 /**
- * TODO re-doc
- * The computer player.  This class instantiates the methods of it's parent class, telling the computer player
- * specifically how to react when it is it's turn to move.  These methods are different from its sibling class
- * since a computer player and a human player behave in different ways when asked to move.  In addition, this class
- * has the extra intel variable which indicates just how smart the computer is.  
+ * {@link ComputerPlayer} is only slightly more complicated than it's counterpart
+ * {@link HumanPlayer} is the sense that it contains and incorporates
+ * {@link ComputerPlayer#intel} into the {@link #makeMove(Gameboard)} method.
  *
- * @author <Matthew Fornaciari>
+ * @author Matthew Fornaciari <mattforni@gmail.com>
  */
 
 public class ComputerPlayer extends Player {
-    private static final Minimax MINIMAX = new Minimax();
-
     private final int intel;
+    private final Strategy strategy;
 
-    public ComputerPlayer(final Side side, final int intel) {
+    public ComputerPlayer(final int intel, final Side side) {
         super(side);
         this.intel = intel;
+        this.strategy = new Minimax();
     }
 
     @Override
     public final boolean makeMove(final Gameboard gameboard) {
-        return makeMove(gameboard, MINIMAX.getBestMove(gameboard, this).getSquare());
+        return makeMove(gameboard, strategy.getBestMove(gameboard, this).getSquare());
     }
 
     @Override
-    public final boolean isHuman() { return false; }
-
     public final int getIntel() { return intel; }
 }

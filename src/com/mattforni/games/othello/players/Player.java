@@ -6,12 +6,11 @@ import com.mattforni.games.othello.gui.Gameboard;
 import com.mattforni.games.othello.gui.square.Square;
 
 /**
- * {@link Player} acts as a simple superclass for both {@link HumanPlayer} and
- * {@link ComputerPlayer} by defining sane defaults for publicly exposed methods.
- * In addition this class defines a public enum {@link Side} which in a
- * convenient wrapper for what color piece should be displayed that obscures
- * the dependency on the {@link Color} class while adding minor useful methods.
- * 
+ * {@link Player} acts as a fairly comprehensive superclass for both
+ * {@link HumanPlayer} and {@link ComputerPlayer} by defining sane defaults for
+ * publicly exposed methods. In addition this class defines a public enum
+ * {@link Side} which is essentially a convenient wrapper for what color piece
+ * should be displayed.
  *
  * @author Matthew Fornaciari <mattforni@gmail.com>
  */
@@ -22,8 +21,6 @@ public abstract class Player {
     protected Player(final Side side) {
         this.side = side;
     }
-
-    public abstract boolean isHuman();
 
     public final boolean attemptMove(final Gameboard gameboard, final Square square) {
         if (square.isValidMove(side)) {
@@ -39,6 +36,8 @@ public abstract class Player {
     public final boolean hasMoves(final Gameboard gameboard) {
         return gameboard.numMoves(this) > 0;
     }
+
+    public boolean isHuman() { return false; }
 
     public boolean makeMove(final Gameboard gameboard) { return false; }
 

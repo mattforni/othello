@@ -95,7 +95,7 @@ public class ControlPanel extends JPanel {
         for (int number = 1; number <= NUM_COMPUTERS; number++) {
             for (final Side side : Side.values()) {
                 final String name = format(COMPUTER_FORMAT, number);
-                final Player computer = new ComputerPlayer(side, number);
+                final Player computer = new ComputerPlayer(number, side);
 
                 final PlayerButton button = new PlayerButton(name, computer);
                 if (number % 2 == 0) { button.setBackground(Color.WHITE); }
