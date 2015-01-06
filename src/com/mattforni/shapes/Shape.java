@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 
 /**
  * A basic shape class to handle rendering and basic manipulations.
+ *
  * @author Matthew Fornaciari <mattforni@gmail.com>
  */
 public abstract class Shape {

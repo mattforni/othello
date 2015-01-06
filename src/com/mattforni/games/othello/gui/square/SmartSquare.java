@@ -21,8 +21,8 @@ import com.mattforni.shapes.Ellipse;
  */
 
 public class SmartSquare extends Square {
-    private final static Color ILLUMINATED = new Color(51, 255, 51);
-    private final static Color UNILLUMINATED = new Color(0, 225, 0);
+    private final static Color HIGHLIGHTED = new Color(51, 255, 51);
+    private final static Color REGULAR = new Color(0, 225, 0);
 
     private final Ellipse piece;
 
@@ -30,13 +30,8 @@ public class SmartSquare extends Square {
 
     public SmartSquare(final Gameboard gameboard, final int row, final int col) {
         super(gameboard, row, col);
-        // Creates the square piece of the board
-        square.setFillColor(UNILLUMINATED);
-
-        // Creates the Othello piece and then makes it invisible
-        piece = new Ellipse(gameboard, column*SIZE+INDENT, 
-                row*SIZE+INDENT, SIZE-2*INDENT, SIZE-2*INDENT);
-        piece.setVisible(false);
+        square.setFillColor(REGULAR);
+        piece = createPiece();
     }
 
     @Override
@@ -45,56 +40,62 @@ public class SmartSquare extends Square {
     @Override
     public final boolean hasPiece() { return side != null; }
 
-    public void setPiece(Side side){
+    public void setPiece(final Side side) {
         this.side = side;
         piece.setFillColor(side.color);
         piece.setVisible(true);
     }
 
-    public int getRow() { return row; }
+    @Override
+    public final boolean isBorder() { return false; }
 
-    public int getColumn() { return column; }
-
+    @Override
     public boolean isValidMove(final Side side) {
-        // makes sure that i am NOT checking pieces that already exist & it is not a border piece
-        if(this.isBorder() || piece.isVisible()){
-            return false;
-        } else {
-            // loops from one less than this piece's col and row to one plus
-            for(int row = this.row - 1; row <= this.row + 1; row++) {
-                for(int column = this.column - 1; column <= this.column + 1; column++) {
-                    // if it is the piece itself we want to skip this square and continue on
-                    if(row == this.row && column == this.column) { continue; }
-                    final Square square = gameboard.get(row, column);
-                    if(square.hasPiece() && square.getSide() != side) {
-                        int rInc = (row-this.row), cInc = (column-this.column);
-                        if(gameboard.get(row+rInc, column+cInc).checkSandwich(side, rInc, cInc)){
-                            return true; 
-                        }
-                    }
+        // If this square is a border or already has a piece it is not valid
+        if(isBorder() || hasPiece()) { return false; }
+
+        // Check all adjacent squares for a valid 'sandwich'
+        for(int row = this.row-1; row <= this.row+1; row++) {
+            for(int column = this.column-1; column <= this.column+1; column++) {
+                // No need to evaluate the square against itself
+                if(row == this.row && column == this.column) { continue; }
+
+                // If there is a valid 'sandwich' in any direction return true
+                // TODO this may be able to be removed in favor of checkSandwich
+                Square square = gameboard.get(row, column);
+                if(square.hasPiece() && square.getSide() != side) {
+                    final int rInc = row - this.row;
+                    final int cInc = column - this.column;
+                    // TODO this may need to be fixed
+                    square = gameboard.get(row + rInc, column + cInc);
+                    if(square.checkSandwich(side, rInc, cInc)) { return true; }
                 }
             }
         }
+
         return false;
     }
 
-    public boolean checkSandwich(final Side side, int rInc, int cInc) {
+    @Override
+    public final boolean checkSandwich(final Side side, final int rInc, final int cInc) {
         // increment the row and column so that we check the NEXT piece and not the same
-    	// if the piece is the same color then a sandwich has been formed, return true
-        if(hasPiece() && getSide() == side) {
-            return true;
-        }
+        // if the piece is the same color then a sandwich has been formed, return true
+        if(hasPiece() && getSide() == side) { return true; }
+
         // if the piece has been placed, but is of the opposite color, check the next
         if(hasPiece() && getSide() != side) {
-            final Square square = gameboard.get(row+rInc, column+cInc);
+            // TODO this may need to be fixed
+            final Square square = gameboard.get(row + rInc, column + cInc);
             return square.checkSandwich(side, rInc, cInc);
         }
+
         // if the piece does not satisfy either of these conditions there is either
         // no piece on the square or this is a border piece in which case there is no sandwich
         return false;
     }
 
-    public void flip(Side side){
+    @Override
+    public final void flip(final Side side) {
         for(int row = this.row - 1; row <= this.row + 1; row++){
             for(int column = this.column - 1; column <= this.column + 1; column++){
                 if(row == this.row && column == this.column) { continue; }
@@ -109,7 +110,8 @@ public class SmartSquare extends Square {
         }
     }
 
-    public void flipSandwich(Side side, int rInc, int cInc){
+    @Override
+    public final void flipSandwich(final Side side, final int rInc, final int cInc) {
         Square square = gameboard.get(this.row, this.column);
         while(square.hasPiece() && square.getSide() != side) {
             square.setPiece(side);
@@ -117,12 +119,24 @@ public class SmartSquare extends Square {
         }
     }
 
-    public void paint(final Graphics2D brush){
+    @Override
+    public final void highlight() { square.setFillColor(HIGHLIGHTED); }
+
+    @Override
+    public final void paint(final Graphics2D brush){
         square.paint(brush);
         piece.paint(brush);
     }
 
-    public void illuminate() { square.setFillColor(ILLUMINATED); }
+    @Override
+    public final void unhighlight() { square.setFillColor(REGULAR); }
 
-    public void unilluminate() { square.setFillColor(UNILLUMINATED); }
+    /* Private methods */
+    private Ellipse createPiece() {
+        final Ellipse piece = new Ellipse(gameboard,
+                column*SIZE+INDENT, row*SIZE+INDENT,
+                SIZE-2*INDENT, SIZE-2*INDENT);
+        piece.setVisible(false);
+        return piece;
+    }
 }

@@ -167,6 +167,7 @@ public class Referee extends Timer {
                 // If neither player has any moves the game is over
                 if (!opponent.hasMoves(gameboard)) {
                     topPanel.setStatus("Game Over");
+                    referee.stop();
                     return;
                 }
 

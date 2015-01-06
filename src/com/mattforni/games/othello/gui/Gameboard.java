@@ -97,7 +97,7 @@ public class Gameboard extends JPanel {
 
     public final void hideMoves() {
         if (moves.isEmpty()) { return; }
-        for (final Square square : moves) { square.unilluminate(); }
+        for (final Square square : moves) { square.unhighlight(); }
         this.repaint();
     }
 
@@ -159,7 +159,7 @@ public class Gameboard extends JPanel {
             for (int column = 0; column < columns; column++) {
                 final Square square = squares[row][column];
                 if(square.isValidMove(player.getSide())) {
-                    square.illuminate();
+                    square.highlight();
                     moves.add(square);
                 }
             }

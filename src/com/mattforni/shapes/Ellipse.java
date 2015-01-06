@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 
 /**
  * A basic elliptical shape.
+ *
  * @author Matthew Fornaciari <mattforni@gmail.com>
  */
 public class Ellipse extends Shape {

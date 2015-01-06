@@ -19,7 +19,7 @@ import com.mattforni.shapes.Rectangle;
 
 public abstract class Square {
     public static final int INDENT = 5;
-    public static final int SIZE = 52;
+    public static final int SIZE = 50;
 
     protected final Gameboard gameboard;
     protected final int row, column;
@@ -32,48 +32,31 @@ public abstract class Square {
         this.square = new Rectangle(gameboard, column*SIZE, row*SIZE, SIZE, SIZE);
     }
 
+    public boolean checkSandwich(final Side side, final int rInc, final int cInc) { return false; }
+
+    public void flip() {}
+
+    public void flipSandwich(final Side side, final int rInc, final int cInc) {}
+
+    public final int getColumn() { return column; }
+
+    public final int getRow() { return row; }
+
     public Side getSide() { return null; }
+
     public boolean hasPiece() { return false; }
 
-    public boolean isValidMove(Side side){
-        return false;
-    }
-    
-    public void setPiece(Side side){
-    }
-    
-    public void flip(){
-    }
-    
-    public void paint(final Graphics2D brush){
-        square.paint(brush);
-    }
+    public void highlight() {}
 
-    public void illuminate(){
-    }
-    
-    public boolean isBorder(){
-        return false;
-    }
+    public boolean isValidMove(final Side side) { return false; }
 
-    public int getRow(){
-    	return 0;
-    }
-    
-    public int getColumn(){
-    	return 0;
-    }
-    
-    public boolean checkSandwich(Side side, int rInc, int cInc){
-        return false;
-    }
-    
-    public void flip(Side side){
-    }
-    
-    public void flipSandwich(Side side, int rInc, int cInc){
-    }
-    
-    public void unilluminate(){
-    }
+    public void paint(final Graphics2D brush) { square.paint(brush); }
+
+    public void setPiece(final Side side) {}
+
+    public boolean isBorder() { return true; }
+
+    public void flip(final Side side) {}
+
+    public void unhighlight() {}
 }

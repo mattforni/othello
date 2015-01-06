@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 
 /**
  * A basic rectangular shape.
+ *
  * @author Matthew Fornaciari <mattforni@gmail.com>
  */
 public class Rectangle extends Shape{
