@@ -6,13 +6,14 @@ import com.mattforni.games.othello.gui.Gameboard;
 import com.mattforni.games.othello.gui.square.Square;
 
 /**
- * TODO re-doc
- * The player interface defines four methods that must then be defined by both of the classe
- * that extend it.  Each player, whether human or computer, must know how to begin their move,
- * make the move, know whether they are human, and know what color they are representing.
- * Thus, the big four methods.
+ * {@link Player} acts as a simple superclass for both {@link HumanPlayer} and
+ * {@link ComputerPlayer} by defining sane defaults for publicly exposed methods.
+ * In addition this class defines a public enum {@link Side} which in a
+ * convenient wrapper for what color piece should be displayed that obscures
+ * the dependency on the {@link Color} class while adding minor useful methods.
+ * 
  *
- * @author <Matthew Fornaciari>
+ * @author Matthew Fornaciari <mattforni@gmail.com>
  */
 
 public abstract class Player {
@@ -39,12 +40,14 @@ public abstract class Player {
         return gameboard.numMoves(this) > 0;
     }
 
-    public void makeMove(final Gameboard gameboard) {}
+    public boolean makeMove(final Gameboard gameboard) { return false; }
 
     public boolean makeMove(final Gameboard gameboard, final Square square) {
         if (!square.isBorder()) {
-            gameboard.makeMove(side, square.getRow(), square.getColumn());
-            return true;
+            if (gameboard.makeMove(side, square.getRow(), square.getColumn())) {
+                if (isHuman()) { gameboard.hideMoves(); }
+                return true;
+            }
         }
         return false;
     }
@@ -76,6 +79,7 @@ public abstract class Player {
             return null;
         }
 
+        @Override
         public final String toString() {
             return string;
         }

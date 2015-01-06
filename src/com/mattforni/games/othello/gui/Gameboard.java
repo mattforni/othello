@@ -101,10 +101,13 @@ public class Gameboard extends JPanel {
         this.repaint();
     }
 
-    public final void makeMove(final Side side, final int row, final int column) {
-        squares[row][column].setPiece(side);
-        squares[row][column].flip(side);
+    public final boolean makeMove(final Side side, final int row, final int column) {
+        final Square square = get(row, column);
+        if (square == null || square.isBorder()) { return false; }
+        square.setPiece(side);
+        square.flip(side);
         this.repaint();
+        return true;
     }
 
     public final void newGame() {

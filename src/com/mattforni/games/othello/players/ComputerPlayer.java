@@ -2,9 +2,9 @@ package com.mattforni.games.othello.players;
 
 import com.mattforni.games.othello.gui.Gameboard;
 import com.mattforni.games.othello.players.ai.Minimax;
-import com.mattforni.games.othello.players.ai.Strategy.Move;
 
 /**
+ * TODO re-doc
  * The computer player.  This class instantiates the methods of it's parent class, telling the computer player
  * specifically how to react when it is it's turn to move.  These methods are different from its sibling class
  * since a computer player and a human player behave in different ways when asked to move.  In addition, this class
@@ -24,9 +24,8 @@ public class ComputerPlayer extends Player {
     }
 
     @Override
-    public final void makeMove(final Gameboard gameboard) {
-        final Move best = MINIMAX.getBestMove(gameboard, this);
-        gameboard.makeMove(side, best.getRow(), best.getColumn());
+    public final boolean makeMove(final Gameboard gameboard) {
+        return makeMove(gameboard, MINIMAX.getBestMove(gameboard, this).getSquare());
     }
 
     @Override

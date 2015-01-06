@@ -1,8 +1,5 @@
 package com.mattforni.games.othello.players;
 
-import com.mattforni.games.othello.gui.Gameboard;
-import com.mattforni.games.othello.gui.square.Square;
-
 /**
  * TODO re-doc
  * The human player.  This class instantiates the methods of it's parent class, telling a specific human
@@ -15,14 +12,6 @@ import com.mattforni.games.othello.gui.square.Square;
 public class HumanPlayer extends Player {
     public HumanPlayer(final Side side){
         super(side);
-    }
-
-    @Override
-    public boolean makeMove(final Gameboard gameboard, final Square square){
-        // TODO make this smarter
-        gameboard.makeMove(side, square.getRow(), square.getColumn());
-        gameboard.hideMoves();
-        return true;
     }
 
     @Override

@@ -16,6 +16,8 @@ import com.mattforni.games.othello.players.Player.Side;
  * similarly, recurses three times.  The combination of getBestMove, evaluateBoard and boardEval
  * make it fairly easy to simulate computer intelligence.  At least a primitive computer intelligence.
  *
+ * TODO re-doc may have to wait a bit, this is still untouched
+ *
  * @author <Matthew Fornaciari>
  */
 
