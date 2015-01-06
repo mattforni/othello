@@ -66,6 +66,16 @@ public abstract class Player {
             this.string = String.valueOf(chars);
         }
 
+        public final Side getOpponent() {
+            switch (this) {
+                case BLACK:
+                    return Side.WHITE;
+                case WHITE:
+                    return Side.BLACK;
+            }
+            return null;
+        }
+
         public final String toString() {
             return string;
         }

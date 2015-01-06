@@ -61,13 +61,13 @@ public class Minimax extends Strategy {
         if(intel == 1){
             return this.boardEval(gameboard, side);
         } else {
-            final Player next = new ComputerPlayer(getOpponent(side), intel-1);
+            final Player next = new ComputerPlayer(side.getOpponent(), intel-1);
             return getBestMove(gameboard, next).getValue();
         }
     }
 
     public int boardEval(Gameboard gameboard, Side side){
-        final Side opponent = getOpponent(side);
+        final Side opponent = side.getOpponent();
         int total = 0;
         for(int row=0; row < gameboard.numRows(); row++){
             for(int col=0; col < gameboard.numColumns(); col++){
@@ -80,16 +80,6 @@ public class Minimax extends Strategy {
             }
         }
         return total;
-    }
-
-    private static Side getOpponent(final Side side) {
-        switch (side) {
-            case BLACK:
-                return Side.WHITE;
-            case WHITE:
-                return Side.BLACK;
-        }
-        return null;
     }
 
     private static class DefaultWeights {
