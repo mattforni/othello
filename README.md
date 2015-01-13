@@ -37,5 +37,5 @@ java -jar othello.jar
 
 ![Final](/images/w2Vb2/w2-vs-b2-final.png "Final")
 
-<h1>Good luck!</h1>
+<h2>Good luck!</h2>
 
