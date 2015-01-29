@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import com.mattforni.games.othello.gui.Gameboard;
 
+
 /**
  * {@link BorderSquare} is a primitive subclass of {@link Square} which may not
  * be played upon. It is used along the edges of the {@link Gameboard} as a

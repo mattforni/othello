@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 
 import com.mattforni.games.othello.gui.Gameboard;
 import com.mattforni.games.othello.players.Player.Side;
-import com.mattforni.shapes.Ellipse;
+import com.mattforni.graphics.shape.Ellipse;
 
 /**
  * {@link PlayableSquare} is an intelligent subclass of {@link Square} which

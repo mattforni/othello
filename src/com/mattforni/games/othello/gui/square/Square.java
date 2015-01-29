@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 
 import com.mattforni.games.othello.gui.Gameboard;
 import com.mattforni.games.othello.players.Player.Side;
-import com.mattforni.shapes.Rectangle;
+import com.mattforni.graphics.shape.Rectangle;
 
 /**
  * {@link Square} acts as a simple superclass for both {@link BorderSquare} and
